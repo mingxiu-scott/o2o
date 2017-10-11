@@ -1,5 +1,12 @@
 <?php
-namespace app\Admin\controller;
+/**
+ * Created by PhpStorm.
+ * User: intern
+ * Date: 2017/10/11
+ * Time: 下午4:00
+ */
+
+namespace app\admin\controller;
 
 use think\Controller;
 
@@ -7,15 +14,18 @@ class Index extends Controller
 {
     public function index()
     {
-
-        $data = [
-            'name' => '李建武',
-            'age' => 18
-        ];
+        return $this->fetch();
+    }
 
 
-        return $this->fetch('',[
-            'person' => $data
-        ]);
+    public function welcome()
+    {
+        return "欢迎来到o2o管理平台";
     }
 }
+
+
+
+
+
+

@@ -11,17 +11,25 @@
 
 // 应用公共文件
 
-function checkAge($age)
+//状态转换为文字的方法
+
+function status($status)
 {
-    if ($age < 18) {
-        $str = '未成年';
+    if ($status == 1) {
+        return "<label class='label label-success radius'>正常</label>";
+    } else if ($status == 0) {
+        return "<label class='label label-danger radius'>待审</label>";
     } else {
-        $str = "成年";
+        return "<label class='label label-danger radius'>正常</label>";
     }
+}
 
+//设置样式的分页方法
 
-    $result = "<label style='color: red'>".$str."</label>";
-
-
+function pagination($pageObj){
+    if (!$pageObj){
+        return null;
+    }
+    $result = "<div class='cl pd-5 bg-1 bk-gray mt-20 tp5-o2o'>".$pageObj->render()."</div>";
     return $result;
 }
