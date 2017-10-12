@@ -32,4 +32,5 @@ function pagination($pageObj){
     }
     $result = "<div class='cl pd-5 bg-1 bk-gray mt-20 tp5-o2o'>".$pageObj->render()."</div>";
     return $result;
+
 }
