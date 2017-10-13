@@ -20,6 +20,12 @@ class Index extends Controller
 
     public function welcome()
     {
+       $res =  \Map::getLngLat('大连市沙河口区软件园3号楼');
+
+        print_r($res);
+
+//        EXTEND_PATH
+
         return "欢迎来到o2o管理平台";
     }
 }

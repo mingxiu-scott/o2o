@@ -21,7 +21,6 @@ class Category extends Controller
         $this->obj = model("Category");
     }
 
-
     public function index()
     {
 
@@ -71,8 +70,6 @@ class Category extends Controller
         $this->success('状态更新成功');
 
     }
-
-
     /**
      *添加分类的方法,去页面
      */
@@ -121,10 +118,12 @@ class Category extends Controller
 
     }
 
-
+    /**
+     * 跳转到编辑的页面
+     * @return mixed
+     */
     public function edit()
     {
-
 
         $id = input('id', 0, 'intval');
 
@@ -193,6 +192,17 @@ class Category extends Controller
         }
 
         $this->result($_SERVER['HTTP_REFERER'],1,'success');
+    }
+
+    /**
+     * 测试图片的方法
+     */
+    public function test(){
+
+        $res = \Map::staticImage('北海市铁山港区南康中学');
+
+        return $res;
+
     }
 
 }

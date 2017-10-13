@@ -26,11 +26,59 @@ function status($status)
 
 //设置样式的分页方法
 
-function pagination($pageObj){
-    if (!$pageObj){
+function pagination($pageObj)
+{
+    if (!$pageObj) {
         return null;
     }
-    $result = "<div class='cl pd-5 bg-1 bk-gray mt-20 tp5-o2o'>".$pageObj->render()."</div>";
+    $result = "<div class='cl pd-5 bg-1 bk-gray mt-20 tp5-o2o'>" . $pageObj->render() . "</div>";
     return $result;
-
 }
+
+//网络请求的方法: cURL
+
+/**
+ * @param $url  请求的url
+ * @param $type 请求的方式 0 是get , 1是post
+ * @param array $data 请求的数据(post时使用)
+ */
+function doCurl($url, $type = 0, $data=[])
+{
+    //初始化curl
+
+    $ch = curl_init();
+
+
+    //设置相关的参数
+    //set option
+    //CURLOPT_URL 请求的链接
+    curl_setopt($ch, CURLOPT_URL, $url);
+
+    //返回文本格式的json
+    //CURLOPT_RETURNTRANSFER 请求的文本以文本流的形式返回
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+
+    //CURLOPT_HEADER 是否返回头部信息 , 0 不反回
+    curl_setopt($ch,CURLOPT_HEADER, 0);
+
+    //判断请求方式
+    if ($type == 1){
+
+        curl_setopt($ch, CURLOPT_POST, $url);
+        curl_setopt($ch,CURLOPT_POSTFIELDS, $data);
+    }
+
+    //执行请求
+    $result = curl_exec($ch);
+
+    //关闭请求
+    curl_close($ch);
+
+    return $result;
+}
+
+
+
+
+
+
