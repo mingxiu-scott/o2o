@@ -30,12 +30,12 @@ class Category extends Model {
     }
 
     //获取到一级分类,不带分类
-    public function getAllFirstNormalCategories(){
+    public function getAllFirstNormalCategories($parent_id = 0){
 
         //条件
         $data = [
             'status' => ['neq', -1],
-            'parent_id' => 0
+            'parent_id' => $parent_id
         ];
 
         //排序属性
