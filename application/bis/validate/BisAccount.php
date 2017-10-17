@@ -23,7 +23,8 @@ class BisAccount extends Validate
     ];
 
     protected $scene = [
-        'add' => ['uesrname','password']
+        'add' => ['uesrname','password'],
+        'login' => ['uesrname','password'],
     ];
 }
 

@@ -23,4 +23,16 @@ class Bis extends Model
 
         return $this->id;
     }
+
+    public function getBisByStatus($status){
+        $data = [
+          'status' => $status
+        ];
+        $order = [
+            'listorder' => 'desc',
+            'id' => 'desc'
+        ];
+
+        return $this->where($data)->order($order)->paginate(5);
+    }
 }

@@ -118,10 +118,11 @@ class Register extends Controller
         //提交到数据库
         $bisId = model('Bis')->add($bisData);
 
-        //准备分类信息,提供给Category_path字段使用
-        $array = $data['se_category_id'];
 
-        if ($array) {
+        //准备分类信息,提供给Category_path字段使用
+        $se_categories_string = '';
+        if (!empty($data['se_category_id'])) {
+            $array = $data['se_category_id'];
             $se_categories_string = implode('|', $array);
         }
 
@@ -169,7 +170,33 @@ class Register extends Controller
         if (!$res) {
             $this->error('申请失败');
         }
-        $this->success('申请加入审核队列');
+
+        //发送邮件通知:
+        $title = '商城入驻审核通知';
+
+        $url = request()->domain() . url('bis/register/waiting', ['id' => $bisId]);
+
+        $content = "你的店铺信息正在审核中,点击<a href='" . $url . "'>查看状态</a>";
+
+        \phpmailer\Email::send($data['email'], $title, $content);
+
+        $this->success('申请成功',url('register/waiting',[
+            'id' => $bisId
+        ]));
     }
 
+    public function waiting($id)
+    {
+        if (empty($id)) {
+            return '';
+        }
+
+        //根据id获取bis信息
+
+        $detail = model('Bis')->get($id);
+
+        return $this->fetch('', [
+            'detail' => $detail
+        ]);
+    }
 }

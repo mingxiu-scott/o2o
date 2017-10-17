@@ -77,6 +77,25 @@ function doCurl($url, $type = 0, $data=[])
     return $result;
 }
 
+//判断商户注册状态
+
+function bisRegister($status){
+    if ($status == 1){
+        $str = '审核成功';
+    }
+    else if($status == 0){
+        $str = '正在审核中,稍后平台方会向你发送邮件,请关注邮件';
+    }
+    else if ($status == 2){
+        $str = '审核为通过,你提交的材料不符合要求,请重新提交';
+    }else {
+        $str = '该申请已经被删除';
+    }
+
+    return $str;
+}
+
+
 
 
 
