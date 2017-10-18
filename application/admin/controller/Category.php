@@ -23,11 +23,8 @@ class Category extends Controller
 
     public function index()
     {
-
         //获取parent_id   接收来自获取子栏目的id
-
         $parent_id = input('parent_id', 0, 'intval');
-
 
         //通过model获取分类数据
         $data = $this->obj->getFirstNormalCategories($parent_id);
@@ -198,11 +195,8 @@ class Category extends Controller
      * 测试图片的方法
      */
     public function test(){
-
         $res = \Map::staticImage('北海市铁山港区南康中学');
-
         return $res;
-
     }
 
 }

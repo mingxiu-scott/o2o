@@ -28,10 +28,11 @@ class Bis extends Controller
         $res = $this->obj->getBisByStatus(1);
 
 
-        return $this->fetch('',[
+        return $this->fetch('', [
             'bis' => $res
         ]);
     }
+
     public function apply()
     {
         //显示status为0的商户
@@ -39,18 +40,107 @@ class Bis extends Controller
         $res = $this->obj->getBisByStatus(0);
 
 
-        return $this->fetch('',[
+        return $this->fetch('', [
             'bis' => $res
         ]);
 
     }
+
     public function dellist()
     {
         $res = $this->obj->getBisByStatus(2);
 
-        return $this->fetch('',[
+        return $this->fetch('', [
             'bis' => $res
         ]);
+    }
+
+    public function edit()
+    {
+
+        $data = intval(input('get.id'));
+
+        //基本信息
+        $res = $this->obj->get($data);
+
+        //城市一级分类
+        $city = model('city')->getNormalCitiesByParentId();
+
+        //获取二级城市分类
+
+        $se_cities = model('city')->getNormalCitiesByParentId(intval($res['city_id']));
+
+        //获取city_path里面的二级城市分类
+
+        $city_path = '';
+
+        $categories = model('Category')->getAllFirstNormalCategories();
+
+        $se_city_id = $this->getSeCityIdByCityPath($city_path);
+
+        //总店信息
+        $resLocation = db('bis_location')->where([
+            'bis_id' => $data,
+            'is_Main' => 1
+        ])->find();
+
+        //账号信息
+        $resAccount = db('bis_account')->where([
+            'bis_id' => $data,
+            'is_Main' => 1
+        ])->find();
+
+        return $this->fetch('', [
+            'bis' => $res,
+            'bl' => $resLocation,
+            'ba' => $resAccount,
+            'city' => $city,
+            'categories' => $categories,
+            'se_city' => $se_cities,
+            'se_city_id' => $se_city_id
+        ]);
+    }
+
+    //根据city_path获取二级城市的id
+    public function getSeCityIdByCityPath($city_path)
+    {
+        if (empty($city_path)) {
+            return '';
+        }
+
+        //9,18格式的
+        $se_cityID = '';
+
+        if (preg_match('/,/', $city_path)) {
+
+            $cityArray = explode(',', $city_path);
+
+            $se_cityID = $cityArray[1];
+        }
+
+        //根据se_cityID 获取城市信息
+        return $se_cityID;
+    }
+
+    //修改状态方法
+    public function status()
+    {
+        //获取id和status
+        $id = input('id', 0, 'intval');
+        $status = input('status', 0, 'intval');
+
+        //修改bis,bisAccount,bisLocation
+        $res_bis = $this->obj->save(['status' => $status, 'id' => $id]);
+
+        $res_location = model('BisLocation')->save(['status' => status()], ['bis_id' => $id, 'is_main' => 1]);
+        $res_account = model('BisAccount')->save(['status' => status()], ['bis_id' => $id, 'is_main' => 1]);
+
+        if ($res_bis && $res_location && $res_account){
+            $this->success('状态更新');
+        }
+
+        $this->error('状态更新失败');
 
     }
+
 }

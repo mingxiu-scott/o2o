@@ -17,9 +17,7 @@
 				<span class="select-box">
 				<select name="city_id" class="select cityId">
 					<option value="0">--请选择--</option>
-					{volist name="citys" id="vo"}
-					<option value="{$vo.id}">{$vo.name}</option>
-					{/volist}
+					<option value=""></option>
 				</select>
 				</span>
 			</div>
@@ -52,9 +50,7 @@
 			<div class="formControls col-xs-8 col-sm-3"> <span class="select-box">
 				<select name="category_id" class="select categoryId">
 					<option value="0">--请选择--</option>
-					{volist name="categorys" id="vo"}
-					<option value="{$vo.id}">{$vo.name}</option>
-					{/volist}
+					<option value=""></option>
 				</select>
 				</span>
 			</div>
@@ -98,7 +94,6 @@
 		</div>
 	</form>
 </article>
-<script>
 <!--包含尾部文件-->
 {include file="public/footer" /}
 <script type="text/javascript" src="__STATIC__/admin/hui/lib/ueditor/1.4.3/ueditor.config.js"></script>
@@ -106,10 +101,8 @@
 <script type="text/javascript" src="__STATIC__/admin/hui/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
 <script>
  var SCOPE = {
-   'city_url' : '{:url('api/city/getCitysByParentId')}',
-    'category_url' : '{:url('api/category/getCategoryByParentId')}',
-	'uploadify_swf' : '__STATIC__/admin/uploadify/uploadify.swf',
-	'image_upload' : '{:url('api/image/upload')}',
+	'uploadify_swf_url' : '__STATIC__/admin/uploadify/uploadify.swf',
+	'uploadify_image_url' : '{:url('api/img/upload')}',
  };
 </script>
 <script>
