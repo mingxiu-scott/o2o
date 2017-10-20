@@ -13,10 +13,12 @@ use think\Model;
 class Deal extends Model
 {
 
-    public function getAllNormalDeals()
+    public function getAllNormalDeals($bis_id = 0)
     {
         $data = [
-          'status' => 1
+            'status' => ['neq', -1],
+            'bis_id' => $bis_id
+
         ];
 
         $order = [
@@ -24,7 +26,21 @@ class Deal extends Model
             'id' => 'desc'
         ];
 
+
         return $this->where($data)->order($order)->paginate(3);
+    }
+
+    public function getDealsByCondition($data = [])
+    {
+        $order = [
+            'listorder' => 'desc',
+            'id' => 'desc'
+        ];
+
+        $res = $this->where($data)->order($order)->paginate(2);
+        print_r($this->getLastSql());
+
+        return $res;
     }
 
 }

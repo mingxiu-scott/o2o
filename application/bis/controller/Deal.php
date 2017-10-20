@@ -13,7 +13,6 @@ class Deal extends Base
 
     private $obj;
 
-
     public function _initialize()
     {
         $this->obj = model('Deal');
@@ -21,8 +20,9 @@ class Deal extends Base
 
     public function index()
     {
+        $bis_id = $this->getLoginUser()->bis_id;
 
-        $deals = $this->obj->getAllNormalDeals();
+        $deals = $this->obj->getAllNormalDeals(intval($bis_id));
 
         return $this->fetch('', [
             'dealData' => $deals
@@ -56,7 +56,7 @@ class Deal extends Base
 
             if (!empty($data['se_category_id'])) {
                 $array = $data['se_category_id'];
-                $se_single_category_string = implode('|',$array);
+                $se_single_category_string = implode('|', $array);
                 $se_categories_string = "," . implode('|', $array);
             }
 
@@ -72,26 +72,25 @@ class Deal extends Base
                 'name' => $data['name'],
                 'se_category_id' => $se_single_category_string,
                 'city_id' => $data['city_id'],
-                'city_path' => $data['city_id'] . $data['se_city_id'],
+                'city_path' => $data['city_id'] . "," . $data['se_city_id'],
                 'category_path' => $data['category_id'] . $se_categories_string,
                 'bis_id' => $bis_id,
                 'location_ids' => $locationIds_String,
                 'image' => $data['image'],
                 'description' => $data['description'],
-                'start_time' =>strtotime( $data['start_time']),
-                'end_time' =>strtotime( $data['end_time']),
+                'start_time' => strtotime($data['start_time']),
+                'end_time' => strtotime($data['end_time']),
                 'origin_price' => $data['origin_price'],
                 'current_price' => $data['current_price'],
                 'total_count' => $data['total_count'],
                 'coupons_begin_time' => strtotime($data['coupons_begin_time']),
-                'coupons_end_time' =>strtotime($data['coupons_end_time']),
+                'coupons_end_time' => strtotime($data['coupons_end_time']),
                 'bis_account_id' => $this->getLoginUser()->id,
                 'notes' => $data['notes'],
-                'se_city_id'=> $data['se_city_id']
+                'se_city_id' => $data['se_city_id']
             ];
 
             //入库操作
-
             $res = model('Deal')->save($dealData);
 
             if (!$res) {
@@ -118,4 +117,72 @@ class Deal extends Base
             ]);
         }
     }
+
+    public function detail()
+    {
+
+        //获取id
+        $id = input('id', 0, 'intval');
+
+        //根据id获取Deal信息
+
+        $deal = $this->obj->get($id);
+
+
+        $bis_id = $this->getLoginUser()->bis_id;
+
+        $cities = model('City')->getNormalCitiesByParentId();
+
+        $categories = model('Category')->getAllFirstNormalCategories();
+
+        //获取当前的商户的素偶有的店铺信息
+        $locations = model('BisLocation')->where(['bis_id' => $bis_id])->select();
+
+
+        $se_cities = model('city')->getNormalCitiesByParentId(intval($deal['city_id']));
+
+//        $se_cities = db('city')->where(['parent_id'=>$deal['city_id'],'status'=>['neq',-1]])->select();
+        //获取city_path里面的二级城市分类
+
+        $city_path = $deal['city_path'];
+
+        dump($city_path);
+
+
+        $se_city_id = $this->getSeCityIdByCityPath($city_path);
+
+        dump($se_city_id);
+
+
+        return $this->fetch('', [
+            'citys' => $cities,
+            'categorys' => $categories,
+            'locations' => $locations,
+            'deal' => $deal,
+            'se_cities' => $se_cities,
+            'se_city_id' => $se_city_id
+        ]);
+    }
+
+
+    public function getSeCityIdByCityPath($city_path)
+    {
+        if (empty($city_path)) {
+            return '';
+        }
+
+        //9,18格式的
+        $se_cityID = '';
+
+        if (preg_match('/,/', $city_path)) {
+
+            $cityArray = explode(',', $city_path);
+
+            $se_cityID = $cityArray[1];
+        }
+
+        //根据se_cityID 获取城市信息
+        return $se_cityID;
+    }
+
 }

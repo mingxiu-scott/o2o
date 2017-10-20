@@ -27,4 +27,20 @@ class City extends Model
         return $this->where($data)->order($order)->select();
     }
 
+    //获取所有非省份的信息(二级城市)
+    public function getAllSeCities()
+    {
+        $data = [
+            'status' => ['neq', -1],
+            'parent_id' => ['gt', 0]
+        ];
+
+        $order = [
+            'listorder' => 'desc',
+            'id' => 'desc'
+        ];
+        return $this->where($data)->order($order)->select();
+    }
+
+
 }

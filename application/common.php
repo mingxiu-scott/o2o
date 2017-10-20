@@ -26,7 +26,8 @@ function status($status)
 
 //判断是否为总店
 
-function checkMain($isMain){
+function checkMain($isMain)
+{
     if ($isMain == 1) {
         return "<label class='label label-success radius'>总店</label>";
     } else if ($isMain == 0) {
@@ -135,11 +136,11 @@ function getCategoryByPath($category_path)
 
             //判读当前的current的id是否存在temp_se_arr中
 
-            if (in_array($current['id'],$temp_se_arr)){
+            if (in_array($current['id'], $temp_se_arr)) {
                 $htmlString .= "<input type='checkbox' value='" . $current['id'] . "' checked>";
                 $htmlString .= "<label>" . $current['name'] . "</label>";
 
-            }else{
+            } else {
                 $htmlString .= "<input type='checkbox' value='" . $current['id'] . "'>";
                 $htmlString .= "<label>" . $current['name'] . "</label>";
             }
@@ -152,7 +153,26 @@ function getCategoryByPath($category_path)
 }
 
 
+function getCityNameByCityId($city_id)
+{
+    if (empty($city_id)) {
+        return '';
+    }
 
+    $city = model('City')->get($city_id);
+
+    return $city->name;
+}
+
+function getCategoryNameByCategoryId($categoryID){
+    if (empty($categoryID)) {
+        return '';
+    }
+
+    $category = model('Category')->get($categoryID);
+
+    return $category->name;
+}
 
 
 
