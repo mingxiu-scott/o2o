@@ -20,7 +20,19 @@ function status($status)
     } else if ($status == 0) {
         return "<label class='label label-danger radius'>待审</label>";
     } else {
-        return "<label class='label label-danger radius'>正常</label>";
+        return "<label class='label label-danger radius'>不通过</label>";
+    }
+}
+
+//判断是否为总店
+
+function checkMain($isMain){
+    if ($isMain == 1) {
+        return "<label class='label label-success radius'>总店</label>";
+    } else if ($isMain == 0) {
+        return "<label class='label label-primary radius'>分店</label>";
+    } else {
+        return "<label class='label label-danger radius'>AA</label>";
     }
 }
 

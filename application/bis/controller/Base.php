@@ -33,7 +33,6 @@ class Base extends Controller
         return true;
     }
 
-
     public function getLoginUser()
     {
 
