@@ -13,7 +13,7 @@ class Bis extends Validate
 {
 
     protected $rule = [
-        'name' => 'require|max:20',
+        'name' => 'require|max:80',
         'email' => 'email',
         'logo' => 'require',
         'licence_logo' => 'require',
